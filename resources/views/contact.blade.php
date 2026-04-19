@@ -82,12 +82,16 @@
                    <div class="col-md-12">
                        <textarea name="message" class="form-control" rows="6" placeholder="Message" required=""></textarea>
                    </div>
+                   <input type="hidden" name="recaptcha_token" id="recaptchaToken">
 
                    <div class="col-md-12 text-center">
-                       <button type="submit" id="sendBtn">Send Message</button>
+                       <button class="btn btn-success" type="button" id="sendBtn" class="g-recaptcha"
+                           data-sitekey="6LcRtL8sAAAAAJAmkGeW7vzOhQbubbjHJiSiCwQu"
+                           data-callback="onRecaptchaSubmit"
+                           data-action="submit">Send Message</button>
                    </div>
                </div>
-            </form
+            </form>
           </div><!-- End Contact Form -->
 
         </div>
@@ -99,6 +103,11 @@
   </main>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+    function onRecaptchaSubmit(token) {
+        $('#recaptchaToken').val(token);
+        $('#contactForm').trigger('submit');
+    }
+
     $(document).ready(function () {
         $('#contactForm').on('submit', function (e) {
             e.preventDefault();

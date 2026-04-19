@@ -52,6 +52,12 @@
     
       gtag('config', 'G-07YW8XRXN0');
     </script>
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LcRtL8sAAAAAJAmkGeW7vzOhQbubbjHJiSiCwQu"></script>
+    <style>
+        .grecaptcha-badge {
+            visibility: hidden !important;
+        }
+    </style>
 </head>
 <body class="index-page">
 
