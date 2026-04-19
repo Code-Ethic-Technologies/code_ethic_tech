@@ -25,19 +25,19 @@
             <li><a href="{{ url('/') }}">Home</a></li>
             <li><a href="{{ url('/about') }}">About us</a></li>
             <li><a href="{{ url('/services') }}">Services</a></li>
-            <li><a href="#">Terms of service</a></li>
-            <li><a href="#">Privacy policy</a></li>
+            <li><a href="{{ url('/terms-of-service') }}">Terms of service</a></li>
+            <li><a href="{{ url('/privacy-policy') }}">Privacy policy</a></li>
           </ul>
         </div>
 
         <div class="col-lg-2 col-md-4 footer-links">
           <h4>Our Services</h4>
           <ul>
-            <li><a href="#">Web Design</a></li>
-            <li><a href="#">Web Development</a></li>
-            <li><a href="#">Product Management</a></li>
-            <li><a href="#">Marketing</a></li>
-            <li><a href="#">Graphic Design</a></li>
+            <li><a href="{{ url('/web-design') }}">Web Design</a></li>
+            <li><a href="{{ url('/web-development') }}">Web Development</a></li>
+            <li><a href="{{ url('/product-management') }}">Product Management</a></li>
+            <li><a href="{{ url('/marketing') }}">Marketing</a></li>
+            <li><a href="{{ url('/graphic-design') }}">Graphic Design</a></li>
           </ul>
         </div>
 
