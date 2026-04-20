@@ -85,10 +85,7 @@
                    <input type="hidden" name="recaptcha_token" id="recaptchaToken">
 
                    <div class="col-md-12 text-center">
-                       <button class="btn btn-success" type="button" id="sendBtn" class="g-recaptcha"
-                           data-sitekey="6LcRtL8sAAAAAJAmkGeW7vzOhQbubbjHJiSiCwQu"
-                           data-callback="onRecaptchaSubmit"
-                           data-action="submit">Send Message</button>
+                       <button class="btn btn-success" type="submit" id="sendBtn">Send Message</button>
                    </div>
                </div>
             </form>
@@ -102,23 +99,18 @@
 
   </main>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-    function onRecaptchaSubmit(token) {
-        $('#recaptchaToken').val(token);
-        $('#contactForm').trigger('submit');
-    }
-
+  <script>
     $(document).ready(function () {
-        $('#contactForm').on('submit', function (e) {
-            e.preventDefault();
-    
+        const recaptchaSiteKey = '6LcRtL8sAAAAAJAmkGeW7vzOhQbubbjHJiSiCwQu';
+
+        function submitContactForm() {
             $.ajax({
                 url: "{{ route('contact.send') }}",
                 method: "POST",
-                data: $(this).serialize(),
+                data: $('#contactForm').serialize(),
                 beforeSend: function () {
                     $('#sendBtn').prop('disabled', true).text('Sending...');
-                    $('#responseMessage').html(''); // clear old messages
+                    $('#responseMessage').html('');
                 },
                 success: function (response) {
                     $('#responseMessage').html(
@@ -127,7 +119,8 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>`
                     );
-                    $('#contactForm')[0].reset(); // clear form
+                    $('#contactForm')[0].reset();
+                    $('#recaptchaToken').val('');
                 },
                 error: function (xhr) {
                     if (xhr.responseJSON && xhr.responseJSON.errors) {
@@ -152,7 +145,37 @@
                     $('#sendBtn').prop('disabled', false).text('Send Message');
                 }
             });
+        }
+
+        $('#contactForm').on('submit', function (e) {
+            e.preventDefault();
+
+            if (typeof grecaptcha === 'undefined' || !grecaptcha.enterprise) {
+                $('#responseMessage').html(
+                    `<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        reCAPTCHA failed to load. Please refresh and try again.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>`
+                );
+                return;
+            }
+
+            grecaptcha.enterprise.ready(function () {
+                grecaptcha.enterprise.execute(recaptchaSiteKey, { action: 'submit' })
+                    .then(function (token) {
+                        $('#recaptchaToken').val(token);
+                        submitContactForm();
+                    })
+                    .catch(function () {
+                        $('#responseMessage').html(
+                            `<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                reCAPTCHA verification failed. Please try again.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>`
+                        );
+                    });
+            });
         });
     });
-    </script>
+  </script>
 @endsection
